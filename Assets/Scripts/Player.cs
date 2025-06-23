@@ -8,21 +8,36 @@ public class Player : MonoBehaviour
     [SerializeField] private Rigidbody2D rb;
     private bool isGrounded=true;
     private bool isJumping=false;
-    private bool isAttack;
+    private bool isIdle = true;
+    private bool isAttack=false;
+    private bool isDead=false;
     [SerializeField] private LayerMask ground;
     private float movement;
     [SerializeField]private float speed=500f;
     [SerializeField] private float jumpForce;
     [SerializeField] private Animator animator;
     private string currentAnim;
+    public int coinAmount=0;
     [SerializeField] private SpriteRenderer spriteRenderer;
+    private Vector3 savePoint;
     private void Awake()
     {
-        
+        ChangeAnimation("idle");
     }
     void Start()
     {
-        
+        SavePoint();
+        OnInit();
+    }
+    public void OnInit()
+    {
+        isGrounded = true;
+        isJumping = false;
+        isIdle = true;
+        isAttack = false;
+        isDead = false;
+        transform.position = savePoint;
+        ChangeAnimation("idle");
     }
 
     // Update is called once per frame
@@ -31,6 +46,15 @@ public class Player : MonoBehaviour
         isGrounded= CheckGrounded();
         movement = Input.GetAxisRaw("Horizontal");
         //vertical = Input.GetAxisRaw("Vertical");
+        if (isDead)
+        {
+            return;
+        }
+        if (isAttack)
+        {
+            rb.velocity = Vector2.zero;
+            return;
+        }
         if (isGrounded)
         {
             if (isJumping)
@@ -39,13 +63,17 @@ public class Player : MonoBehaviour
             }
             if (Input.GetKeyDown(KeyCode.Space) && isGrounded)
             {
-                isJumping = true;
-                ChangeAnimation("jump");
-                //isGrounded = false;
-                rb.AddForce(jumpForce * Vector2.up);
+                Jump();
             }
-        
-            if (Mathf.Abs(movement) > 0.1f)
+            else if (Input.GetKeyDown(KeyCode.C) && isGrounded)
+            {
+                Attack();
+            }
+            else if (Input.GetKeyDown(KeyCode.V) && isGrounded)
+            {
+                Throw();
+            }
+            else if (Mathf.Abs(movement) > 0.1f)
             {
                 ChangeAnimation("run");
             }
@@ -54,13 +82,14 @@ public class Player : MonoBehaviour
         {
             ChangeAnimation("fall");
             isJumping = false;
+            isIdle = true;
         }
-        if (Mathf.Abs(movement)>0.1f)
+        if (Mathf.Abs(movement)>0.1f&&!isAttack)
         {
             transform.rotation = Quaternion.Euler(new Vector3(0, movement > 0?0: 180, 0));
             rb.velocity = new Vector2(movement*Time.deltaTime*speed, rb.velocity.y);
         }
-        else if(isGrounded)
+        else if(isGrounded&&isIdle)
         {
             ChangeAnimation("idle");
             rb.velocity = Vector2.zero;
@@ -72,19 +101,32 @@ public class Player : MonoBehaviour
         RaycastHit2D hit = Physics2D.Raycast(transform.position, Vector2.down, 1.1f, ground);
         return hit.collider!= null;
     }
+    public void ResetAttack()
+    {
+        isAttack = false;
+        isIdle = true;
+        ChangeAnimation("idle");
+    }
     private void Attack()
     {
-
+        isIdle = false;
+        isAttack = true;
+        ChangeAnimation("attack");
+        Invoke(nameof(ResetAttack), 0.5f);
     }
     private void Throw()
     {
-
+        isIdle = false;
+        isAttack = true;
+        ChangeAnimation("throw");
+        Invoke(nameof(ResetAttack), 0.5f);
     }
     private void Jump()
     {
+        isJumping = true;
+        isIdle = false;
         ChangeAnimation("jump");
         rb.AddForce(jumpForce * Vector2.up);
-
     }
     private void Dead()
     {
@@ -92,12 +134,29 @@ public class Player : MonoBehaviour
     }
     private void ChangeAnimation(string animationName)
     {
-            Debug.Log(animationName); 
         if (currentAnim != animationName)
         {
             animator.ResetTrigger(animationName);
             currentAnim = animationName;
             animator.SetTrigger(currentAnim);
+        }
+    }
+    public void SavePoint()
+    {
+        savePoint=transform.position;
+    }
+    private void OnTriggerEnter2D(Collider2D collision)
+    {
+        if(collision.tag=="Coin")
+        {
+            coinAmount++;
+            Destroy(collision.gameObject);
+        }
+        if(collision.tag=="DeathZone")
+        {
+            isDead = true;
+            ChangeAnimation("die");
+            Invoke(nameof(OnInit), 1f);
         }
     }
 }
