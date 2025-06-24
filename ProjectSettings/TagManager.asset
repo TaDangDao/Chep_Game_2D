@@ -7,6 +7,8 @@ TagManager:
   - Coin
   - DeathZone
   - SavePoint
+  - Enemy
+  - EnemyWall
   layers:
   - Default
   - TransparentFX
@@ -14,8 +16,8 @@ TagManager:
   - Ground
   - Water
   - UI
-  - 
-  - 
+  - Player
+  - Enemy
   - 
   - 
   - 

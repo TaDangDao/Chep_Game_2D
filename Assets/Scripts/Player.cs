@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-public class Player : MonoBehaviour
+public class Player : Character
 {
     // Start is called before the first frame update
     [SerializeField] private Rigidbody2D rb;
@@ -15,39 +15,52 @@ public class Player : MonoBehaviour
     private float movement;
     [SerializeField]private float speed=500f;
     [SerializeField] private float jumpForce;
-    [SerializeField] private Animator animator;
-    private string currentAnim;
+    [SerializeField] private Kunai kunaiPrefab;
+    [SerializeField] private Transform throwPoint;
+    [SerializeField] private GameObject attackArea;
     public int coinAmount=0;
     [SerializeField] private SpriteRenderer spriteRenderer;
-    private Vector3 savePoint;
+    public Vector3 savePoint;
     private void Awake()
     {
         ChangeAnimation("idle");
-    }
-    void Start()
-    {
         SavePoint();
-        OnInit();
     }
-    public void OnInit()
+    public override void OnInit()
     {
+        ChangeAnimation("idle");
+        base.OnInit();
+        coinAmount = PlayerPrefs.GetInt("Coin",0);
+        UIManager.Instance.SetCoin(coinAmount);
         isGrounded = true;
         isJumping = false;
         isIdle = true;
         isAttack = false;
         isDead = false;
         transform.position = savePoint;
-        ChangeAnimation("idle");
+        DeActiveAttack();
+        Debug.Log("respawn");
+    }
+    public override void OnDespawn()
+    {
+        base.OnDespawn();
+        OnInit();
+    }
+    protected override void OnDeath()
+    {
+        base.OnDeath();
+        isDead = true;
     }
 
     // Update is called once per frame
     void Update()
     {
         isGrounded= CheckGrounded();
-        movement = Input.GetAxisRaw("Horizontal");
+       // movement = Input.GetAxisRaw("Horizontal");
         //vertical = Input.GetAxisRaw("Vertical");
         if (isDead)
         {
+            ChangeAnimation("die");
             return;
         }
         if (isAttack)
@@ -87,7 +100,7 @@ public class Player : MonoBehaviour
         if (Mathf.Abs(movement)>0.1f&&!isAttack)
         {
             transform.rotation = Quaternion.Euler(new Vector3(0, movement > 0?0: 180, 0));
-            rb.velocity = new Vector2(movement*Time.deltaTime*speed, rb.velocity.y);
+            rb.velocity = new Vector2(movement*speed, rb.velocity.y);
         }
         else if(isGrounded&&isIdle)
         {
@@ -105,21 +118,27 @@ public class Player : MonoBehaviour
     {
         isAttack = false;
         isIdle = true;
+        DeActiveAttack();
         ChangeAnimation("idle");
     }
-    private void Attack()
+    public void Attack()
     {
         isIdle = false;
         isAttack = true;
         ChangeAnimation("attack");
         Invoke(nameof(ResetAttack), 0.5f);
+        ActiveAttack();
     }
-    private void Throw()
+    public void Throw()
     {
         isIdle = false;
         isAttack = true;
         ChangeAnimation("throw");
         Invoke(nameof(ResetAttack), 0.5f);
+        Instantiate(kunaiPrefab, 
+            throwPoint.transform.position, 
+            transform.rotation.y == 0?Quaternion.identity: Quaternion.Euler(new Vector3(0, -180, 0)))
+            .GetComponent<Kunai>().OnInit(1);
     }
     private void Jump()
     {
@@ -132,24 +151,29 @@ public class Player : MonoBehaviour
     {
 
     }
-    private void ChangeAnimation(string animationName)
-    {
-        if (currentAnim != animationName)
-        {
-            animator.ResetTrigger(animationName);
-            currentAnim = animationName;
-            animator.SetTrigger(currentAnim);
-        }
-    }
     public void SavePoint()
     {
         savePoint=transform.position;
+    }
+    private void ActiveAttack()
+    {
+        attackArea.gameObject.SetActive(true);
+    }
+    private void DeActiveAttack()
+    {
+        attackArea.gameObject.SetActive(false);
+    }
+    public void SetMove(float horizontal)
+    {
+        this.movement=horizontal;
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
         if(collision.tag=="Coin")
         {
             coinAmount++;
+            PlayerPrefs.SetInt("Coin", coinAmount);
+            UIManager.Instance.SetCoin(coinAmount);
             Destroy(collision.gameObject);
         }
         if(collision.tag=="DeathZone")
