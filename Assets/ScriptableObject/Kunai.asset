@@ -1,0 +1,18 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 4941a60b818d5a14cbbabfeed2f9e802, type: 3}
+  m_Name: Kunai
+  m_EditorClassIdentifier: 
+  upgradename: Kunai
+  statsUpgrade: 10
+  goldConsume: 2
+  Icon: {fileID: 0}

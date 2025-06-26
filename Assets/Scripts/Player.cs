@@ -18,6 +18,8 @@ public class Player : Character
     [SerializeField] private Kunai kunaiPrefab;
     [SerializeField] private Transform throwPoint;
     [SerializeField] private GameObject attackArea;
+    [SerializeField] private float mana;
+    [SerializeField] private HealthBar manaBar;
     public int coinAmount=0;
     [SerializeField] private SpriteRenderer spriteRenderer;
     public Vector3 savePoint;
@@ -29,7 +31,11 @@ public class Player : Character
     public override void OnInit()
     {
         ChangeAnimation("idle");
-        base.OnInit();
+        hp = PlayerPrefs.GetFloat("PlayerHealth", 100);
+        damage = PlayerPrefs.GetFloat("PlayerDamage", 5);
+        mana = PlayerPrefs.GetFloat("PlayerMana", 100);
+        healthBar.OnInit(hp, transform);
+        manaBar.OnInit(mana, transform);
         coinAmount = PlayerPrefs.GetInt("Coin",0);
         UIManager.Instance.SetCoin(coinAmount);
         isGrounded = true;
@@ -56,7 +62,7 @@ public class Player : Character
     void Update()
     {
         isGrounded= CheckGrounded();
-       // movement = Input.GetAxisRaw("Horizontal");
+        movement = Input.GetAxisRaw("Horizontal");
         //vertical = Input.GetAxisRaw("Vertical");
         if (isDead)
         {
@@ -78,18 +84,18 @@ public class Player : Character
             {
                 Jump();
             }
-            else if (Input.GetKeyDown(KeyCode.C) && isGrounded)
-            {
-                Attack();
-            }
-            else if (Input.GetKeyDown(KeyCode.V) && isGrounded)
-            {
-                Throw();
-            }
             else if (Mathf.Abs(movement) > 0.1f)
             {
                 ChangeAnimation("run");
             }
+        }
+        if (Input.GetKeyDown(KeyCode.V) && !isAttack)
+        {
+            Throw();
+        }
+        else if (Input.GetKeyDown(KeyCode.C) && !isAttack)
+        {
+            Attack();
         }
         if (!isGrounded && rb.velocity.y < 0)
         {
@@ -108,6 +114,41 @@ public class Player : Character
             rb.velocity = Vector2.zero;
         }
     }
+    public void Upgrade(UpgradeOption upgradeOption)
+    {
+        switch (upgradeOption.info.name)
+        {
+            case "Health":
+                hp += hp * upgradeOption.info.statsUpgrade / 100f;
+                SetHealth(hp);
+                break;
+            case "Damage":
+                damage += damage * upgradeOption.info.statsUpgrade / 100f;
+                SetDamage(damage);
+                break;
+            case "Mana":
+                mana += mana * upgradeOption.info.statsUpgrade / 100f;
+                SetMana(mana);
+                break;
+            case "Kunai":
+                Debug.Log("Upgrade Kunai");
+                break;
+            default:
+                break;
+        }
+    }
+    public void SetHealth(float hp)
+    {
+        PlayerPrefs.SetFloat("PlayerHealth", hp);
+        healthBar.OnInit(hp, transform);
+    }  public void SetDamage(float damage)
+    {
+        PlayerPrefs.SetFloat("PlayerDamge",damage);
+    }  public void SetMana(float mana)
+    {
+        PlayerPrefs.SetFloat("PlayerMana", mana);
+        manaBar.OnInit(mana, transform);
+    }
     private bool CheckGrounded()
     {
         Debug.DrawLine(transform.position, transform.position + Vector3.down*1.1f, Color.red);
@@ -125,7 +166,8 @@ public class Player : Character
     {
         isIdle = false;
         isAttack = true;
-        ChangeAnimation("attack");
+        string attackAnim = isGrounded ? "attack" : "jump_attack";
+        ChangeAnimation(attackAnim);
         Invoke(nameof(ResetAttack), 0.5f);
         ActiveAttack();
     }
@@ -133,12 +175,20 @@ public class Player : Character
     {
         isIdle = false;
         isAttack = true;
-        ChangeAnimation("throw");
+        mana -= 20;
+        manaBar.SetHp(mana);
+        manaBar.SetFilled();
+        string throwAnim = isGrounded ? "throw" : "jump_throw";
+        ChangeAnimation(throwAnim);
         Invoke(nameof(ResetAttack), 0.5f);
-        Instantiate(kunaiPrefab, 
-            throwPoint.transform.position, 
-            transform.rotation.y == 0?Quaternion.identity: Quaternion.Euler(new Vector3(0, -180, 0)))
-            .GetComponent<Kunai>().OnInit(1);
+
+        var kunai = Instantiate(
+            kunaiPrefab,
+            throwPoint.position,
+            transform.rotation.y == 0 ? Quaternion.identity : Quaternion.Euler(0, -180, 0)
+        ).GetComponent<Kunai>();
+
+        kunai.OnInit(1); // damage level
     }
     private void Jump()
     {

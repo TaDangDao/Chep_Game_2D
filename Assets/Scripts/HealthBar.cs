@@ -33,4 +33,8 @@ public class HealthBar : MonoBehaviour
         this.hp = hp;
         //_image.fillAmount = hp / maxHp;
     }
+    public void SetFilled()
+    {
+        _image.type = Image.Type.Filled;
+    }
 }

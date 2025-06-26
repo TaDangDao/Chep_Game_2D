@@ -8,7 +8,9 @@ public class Character : MonoBehaviour
     [SerializeField] protected HealthBar healthBar;
     [SerializeField] private CombatText combatTextPrefab;
     private string currentAnim="idle";
-    private float hp;
+    protected float hp;
+    protected float damage;
+    public float Damage => damage;
     public bool IsDead => hp <= 0;
 
     private void Start()
@@ -19,7 +21,8 @@ public class Character : MonoBehaviour
     public virtual void OnInit()
     {
         hp = 100;
-        healthBar.OnInit(100,transform);
+        damage = 5;
+        healthBar.OnInit(hp,transform);
     }
     public virtual void OnDespawn()
     {

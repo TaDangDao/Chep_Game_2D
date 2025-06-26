@@ -12,6 +12,10 @@ public class Kunai : MonoBehaviour
         rb.velocity = transform.right*direction * 5f;
         Invoke(nameof(OnDespawn), 4f);
     }
+    public void UpgradeBehavior(int level)
+    {
+
+    }
     public void OnDespawn()
     {
         Destroy(gameObject);
