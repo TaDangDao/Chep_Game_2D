@@ -15,4 +15,4 @@ MonoBehaviour:
   upgradename: Kunai
   statsUpgrade: 10
   goldConsume: 2
-  Icon: {fileID: 0}
+  Icon: {fileID: 21300000, guid: a4aad7854c843684eb5dd1e6f2bd8945, type: 3}
