@@ -13,6 +13,6 @@ MonoBehaviour:
   m_Name: Kunai
   m_EditorClassIdentifier: 
   upgradename: Kunai
-  statsUpgrade: 10
+  statsUpgrade: 35
   goldConsume: 2
   Icon: {fileID: 21300000, guid: a4aad7854c843684eb5dd1e6f2bd8945, type: 3}
