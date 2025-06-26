@@ -36,6 +36,7 @@ public class Player : Character
         mana = PlayerPrefs.GetFloat("PlayerMana", 100);
         healthBar.OnInit(hp, transform);
         manaBar.OnInit(mana, transform);
+        Debug.Log(damage);
         coinAmount = PlayerPrefs.GetInt("Coin",0);
         UIManager.Instance.SetCoin(coinAmount);
         isGrounded = true;

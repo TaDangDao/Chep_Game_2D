@@ -21,7 +21,7 @@ public class Character : MonoBehaviour
     public virtual void OnInit()
     {
         hp = 100;
-        damage = 5;
+        damage = 10;
         healthBar.OnInit(hp,transform);
     }
     public virtual void OnDespawn()
