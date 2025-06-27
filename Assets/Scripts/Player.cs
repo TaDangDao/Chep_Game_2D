@@ -161,6 +161,7 @@ public class Player : Character
             {
                 case "Health":// Nâng cấp máu của player
                     maxHp += maxHp * upgradeOption.info.statsUpgrade / 100f;
+                    hp = maxHp;
                     SetHealth(maxHp);
                     break;
                 case "Damage":// Nâng cấp damage của player
@@ -169,6 +170,7 @@ public class Player : Character
                     break;
                 case "Mana":// Nâng cấp mana của player
                     mana += mana * upgradeOption.info.statsUpgrade / 100f;
+                    currentMana = mana;
                     SetMana(mana);
                     break;
                 case "Kunai":// // Nâng cấp damage của kunai
@@ -239,26 +241,29 @@ public class Player : Character
     // Ném kunai
     public void Throw()
     {
-        // Đặt các trạng thái
-        isIdle = false;
-        isAttack = true;
-        // trừ mana và cập nhật thanh mana
-        currentMana -= 20;
-        manaBar.SetHp(currentMana);
-        manaBar.SetFilled();
-        //Quyết định anim nhảy ném hay ném bình thường
-        string throwAnim = isGrounded ? "throw" : "jump_throw";
-        ChangeAnimation(throwAnim);// Chuyển anim ném
-        Invoke(nameof(ResetAttack), 0.5f);// // Gọi hàm RessetAttack sau 0.5 giây
+        if (currentMana > 20)// Kiểm tra có đủ mana không
+        {
+            // Đặt các trạng thái
+            isIdle = false;
+            isAttack = true;
+            // trừ mana và cập nhật thanh mana
+            currentMana -= 20;
+            manaBar.SetHp(currentMana);
+            manaBar.SetFilled();
+            //Quyết định anim nhảy ném hay ném bình thường
+            string throwAnim = isGrounded ? "throw" : "jump_throw";
+            ChangeAnimation(throwAnim);// Chuyển anim ném
+            Invoke(nameof(ResetAttack), 0.5f);// // Gọi hàm RessetAttack sau 0.5 giây
 
-        // Khởi tạo kunai
-        var kunai = Instantiate(
-            kunaiPrefab,
-            throwPoint.position,
-            transform.rotation.y == 0 ? Quaternion.identity : Quaternion.Euler(0, -180, 0)
-        ).GetComponent<Kunai>();
+            // Khởi tạo kunai
+            var kunai = Instantiate(
+                kunaiPrefab,
+                throwPoint.position,
+                transform.rotation.y == 0 ? Quaternion.identity : Quaternion.Euler(0, -180, 0)
+            ).GetComponent<Kunai>();
 
-        kunai.OnInit(1, kunaiDamage); // Thiết lập Kunai
+            kunai.OnInit(1, kunaiDamage); // Thiết lập Kunai
+        }
     }
     // Nhảy
     private void Jump()
