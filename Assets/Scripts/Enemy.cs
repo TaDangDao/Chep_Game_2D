@@ -7,8 +7,8 @@ using UnityEngine.UIElements;
 public class Enemy : Character
 {
     // Các thông số cấu hình enemy
-    [SerializeField] private float attackRange;  // Khoảng cách tấn công
-    [SerializeField] private float moveSpeed;    // Tốc độ di chuyển
+    [SerializeField] protected float attackRange;  // Khoảng cách tấn công
+    [SerializeField] protected float moveSpeed;    // Tốc độ di chuyển
     [SerializeField] private Rigidbody2D rb;    // Thành phần vật lý
     [SerializeField] private GameObject attackArea; // Vùng tấn công
 
@@ -80,7 +80,7 @@ public class Enemy : Character
     }
 
     // Thực hiện tấn công
-    public void Attack()
+    public virtual void Attack()
     {
         ChangeAnimation("attack"); // Animation tấn công
         ActiveAttack(); // Kích hoạt vùng tấn công

@@ -22,6 +22,11 @@ public class CameraFollow : MonoBehaviour
         camHeight = cam.orthographicSize;
         camWidth = cam.aspect * camHeight;
     }
+    public void SetMaxBound(Transform maxBound)
+    {
+        this.maxBound = maxBound;
+
+    }
 
     void Update()
     {

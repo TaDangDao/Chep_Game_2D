@@ -11,7 +11,7 @@ public class Character : MonoBehaviour
     [SerializeField] protected HealthBar healthBar;
 
     // Prefab hiển thị sát thương khi bị đánh trúng
-    [SerializeField] private CombatText combatTextPrefab;
+    [SerializeField] protected CombatText combatTextPrefab;
 
     // Tên animation hiện tại, mặc định là "idle" (đứng yên)
     private string currentAnim = "idle";
@@ -63,7 +63,7 @@ public class Character : MonoBehaviour
     }
 
     // Hàm xử lý khi nhận sát thương
-    public void OnHit(float damage)
+    public virtual void OnHit(float damage)
     {
         // Chỉ xử lý nếu nhân vật còn sống
         if (!IsDead)

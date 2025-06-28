@@ -37,7 +37,7 @@ public class HealthBar : MonoBehaviour
     }
 
     // Hàm cập nhật máu hiện tại
-    public void SetHp(float hp)
+    public virtual void SetHp(float hp)
     {
         this.hp = hp;                   // Cập nhật giá trị máu hiện tại
         // _image.fillAmount = hp / maxHp; // Có thể dùng cách này để cập nhật ngay lập tức

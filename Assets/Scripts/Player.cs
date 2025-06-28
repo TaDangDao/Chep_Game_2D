@@ -26,6 +26,7 @@ public class Player : Character
     public Vector3 savePoint; // Vị trí hồi sinh
     private float manaRecoveryTime ; // Thời gian hồi phục mana
     private float manaTimer; // Đếm thời gian hồi phục mana
+    private bool canControl = true;
     private void Awake()
     {
         ChangeAnimation("idle");//Bắt đầu với animation đứng yên
@@ -67,14 +68,19 @@ public class Player : Character
     public override void OnDespawn()
     {
         base.OnDespawn();
-        OnInit();// Khởi tạo lại khi hủy
+       // OnInit();// Khởi tạo lại khi hủy
     }
     protected override void OnDeath()
     {
         base.OnDeath();// Gọi hàm OnDeath của cha;
+        UIManager.Instance.ShowEndGameCanvas(0);
         isDead = true;// Đặt trạng thái chết
     }
-
+    public void SetControl(bool enable)
+    {
+        canControl = enable;
+        rb.velocity = Vector2.zero;
+    }
     // Update is called once per frame
     void Update()
     {
