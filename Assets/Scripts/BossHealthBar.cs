@@ -4,7 +4,7 @@ using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
 
-public class BossHealthBar : HealthBar
+public class BossHealthBar : MonoBehaviour
 {
     [SerializeField] private Image healthFill;// Tham chiếu tới hình ảnh thanh máu
     [SerializeField] private TextMeshProUGUI bossNameText;// Thanm chiếu tới tên
@@ -19,7 +19,7 @@ public class BossHealthBar : HealthBar
         healthFill.fillAmount = 1f;
     }
     // Set giá trị thanh máu
-    public override void SetHp(float currentHp)
+    public  void SetHp(float currentHp)
     {
         healthFill.fillAmount = currentHp / maxHp;
     }

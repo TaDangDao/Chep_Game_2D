@@ -26,7 +26,6 @@ public class BossController :Enemy
         player = FindObjectOfType<Player>();
         attack_Time = 2f;
         attack_Timer = 2f;
-        healthBar = bossHealthBar;
     }
     // Khởi động boss
     public void InitiateBattle()
