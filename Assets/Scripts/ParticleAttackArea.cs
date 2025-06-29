@@ -4,8 +4,8 @@ using UnityEngine;
 
 public class ParticleAttackArea : MonoBehaviour
 {
-    private ParticleSystem ps;
-    private Character owner;
+    private ParticleSystem ps;//Tham chiếu của hệ thống particle
+    private Character owner;//Tham chiếu của boss
     void Start()
     {
         ps = GetComponent<ParticleSystem>();
@@ -13,14 +13,13 @@ public class ParticleAttackArea : MonoBehaviour
     }
     private void OnParticleTrigger()
     {
-        List<ParticleSystem.Particle> particles = new List<ParticleSystem.Particle>();
-        int num = ps.GetTriggerParticles(ParticleSystemTriggerEventType.Enter, particles);
+        List<ParticleSystem.Particle> particles = new List<ParticleSystem.Particle>();// Lấy list các hạt được bắn ra
+        int num = ps.GetTriggerParticles(ParticleSystemTriggerEventType.Enter, particles);// lấy số lượng hạt được kích hoạt bởi event enter
 
         if (num > 0)
         {
-            Player player = FindObjectOfType<Player>();
-            player.OnHit(owner.Damage);
-            //player.TakeDamage(10 * num); // Gây damage dựa trên số hạt
+            Player player = FindObjectOfType<Player>();// Tìm player
+            player.OnHit(owner.Damage);// Gây damage player
         }
     }
   
