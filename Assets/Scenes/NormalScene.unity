@@ -33117,6 +33117,10 @@ PrefabInstance:
       propertyPath: upgradeUIList.Array.data[2].button
       value: 
       objectReference: {fileID: 1497952076}
+    - target: {fileID: 2635189863870717088, guid: f308b711595e68f419800f5d457d6680, type: 3}
+      propertyPath: m_FillAmount
+      value: 1
+      objectReference: {fileID: 0}
     - target: {fileID: 4308830180960229508, guid: f308b711595e68f419800f5d457d6680, type: 3}
       propertyPath: m_IsActive
       value: 0

@@ -11,6 +11,7 @@ public class SavePoint : MonoBehaviour
         if (collision.tag == "Player")
         {
             collision.GetComponent<Player>().SavePoint();
+           
         }
     }
 }

@@ -140,6 +140,10 @@ public class Player : Character
         {
             Attack();// Gọi hàm tấn công
         }
+        else if(Input.GetKeyDown(KeyCode.F))
+        {
+            Dash();
+        }
         if (!isGrounded && rb.velocity.y < 0)// Nếu không ở trên mặt đất và đang rơi 
         {
             ChangeAnimation("fall");//Chuyển sang animation rơi xuống
@@ -279,9 +283,10 @@ public class Player : Character
         ChangeAnimation("jump");
         rb.AddForce(jumpForce * Vector2.up);//Thêm lực đẩy lên
     }
-    private void Dead()
+    private void Dash()
     {
-
+        rb.AddForce(transform.right * 10000f);
+        Debug.Log("Dash");
     }
     // Hàm lưu vị trí quay trở về khi chết
     public void SavePoint()

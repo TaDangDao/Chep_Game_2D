@@ -13,6 +13,7 @@ public class BossController :Enemy
     private Vector3 movement;
     private float attack_Time;// Thời gian tấn công
     private float attack_Timer;// Bộ đếm thời gian
+    private ParticleSystemRenderer particleSystemRenderer;// Lấy tham chiều của thành phần Renderer trong ParticleSystem
     public void Start()
     {
         OnInit();
@@ -26,6 +27,7 @@ public class BossController :Enemy
         player = FindObjectOfType<Player>();
         attack_Time = 2f;
         attack_Timer = 2f;
+        particleSystemRenderer = ps.GetComponent<ParticleSystemRenderer>();
     }
     // Khởi động boss
     public void InitiateBattle()
@@ -127,6 +129,7 @@ public class BossController :Enemy
     // Chiêu thức phase 2
     public void CastAoeAttack()
     {
+        particleSystemRenderer.flip = new Vector3(transform.rotation.y == 0 ? 0 : 1,0,0);// Đổi hướng particle dựa trên hướng của boss
         ps.Play();// Cho chạy particle system để phóng ra các thanh kunai
     }
     // Hàm gọi khi chết
