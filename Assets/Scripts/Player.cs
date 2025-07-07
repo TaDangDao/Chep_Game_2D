@@ -27,11 +27,13 @@ public class Player : Character
     private float manaRecoveryTime ; // Thời gian hồi phục mana
     private float manaTimer; // Đếm thời gian hồi phục mana
     private bool canControl = true;
+    private FlameThrow flameSkill;
     private void Awake()
     {
         ChangeAnimation("idle");//Bắt đầu với animation đứng yên
         manaRecoveryTime = 1f;
         manaTimer = 0f;
+        flameSkill=GetComponentInChildren<FlameThrow>();
         SavePoint();// Lưu vị trí ban đầu
     }
     public override void OnInit()
@@ -143,6 +145,9 @@ public class Player : Character
         else if(Input.GetKeyDown(KeyCode.F))
         {
             Dash();
+        }else if (Input.GetKeyDown(KeyCode.G) && isGrounded)
+        {
+            flameSkill.Attack(transform.rotation.y==0 ? 1 : -1);
         }
         if (!isGrounded && rb.velocity.y < 0)// Nếu không ở trên mặt đất và đang rơi 
         {
@@ -162,6 +167,7 @@ public class Player : Character
         }
 
     }
+
     // Hàm để thực thi các Upgrade mà người chơi mua bằng vàng
     public void Upgrade(UpgradeOption upgradeOption)
     {

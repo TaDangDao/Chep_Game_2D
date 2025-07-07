@@ -11490,6 +11490,54 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1160646048}
   m_CullTransparentMesh: 1
+--- !u!1 &1172882741
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1172882742}
+  - component: {fileID: 1172882743}
+  m_Layer: 6
+  m_Name: FlameThrow
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!4 &1172882742
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172882741}
+  serializedVersion: 2
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 1.11, y: -0.6, z: 0}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 1970217879}
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &1172882743
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1172882741}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f5259e1d685a3d04385d36195feb9e47, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  firePrefab: {fileID: 1600476002753710519, guid: 11c522f7a8074bd40aa02b8027656b50, type: 3}
+  pooling: []
+  time: 0
+  timer: 0
 --- !u!1 &1185021990
 GameObject:
   m_ObjectHideFlags: 0
@@ -33179,7 +33227,10 @@ PrefabInstance:
       objectReference: {fileID: 1868375291}
     m_RemovedComponents: []
     m_RemovedGameObjects: []
-    m_AddedGameObjects: []
+    m_AddedGameObjects:
+    - targetCorrespondingSourceObject: {fileID: 5731877094939711607, guid: f308b711595e68f419800f5d457d6680, type: 3}
+      insertIndex: -1
+      addedObject: {fileID: 1172882742}
     m_AddedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: f308b711595e68f419800f5d457d6680, type: 3}
 --- !u!1660057539 &9223372036854775807

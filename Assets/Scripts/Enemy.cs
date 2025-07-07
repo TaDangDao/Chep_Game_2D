@@ -75,6 +75,7 @@ public class Enemy : Character
     // Dừng di chuyển
     public void StopMoving()
     {
+        if(IsDead) return;
         ChangeAnimation("idle"); // Chuyển animation đứng yên
         rb.velocity = Vector2.zero; // Vận tốc = 0
     }
