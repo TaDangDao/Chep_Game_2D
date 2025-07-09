@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using UnityEditor;
 using UnityEngine;
 
-public class BulletBase : MonoBehaviour
+public class BulletBase : GameUnit
 {
     [SerializeField] private float speed=10f;
     float dmg;
@@ -17,11 +17,12 @@ public class BulletBase : MonoBehaviour
     }
     public void OnDespawn()
     {
-        Destroy(gameObject);
+        //Destroy(gameObject);
+        SimplePool.Despawn(this);
     }
     private void OnTriggerEnter2D(Collider2D collision)
     {
-        if (collision.CompareTag("Water"))
+        if (collision.CompareTag("DeathZone"))
         {
             OnDespawn();
         }

@@ -11,8 +11,8 @@ public class Gun_2 : GunBase
         base.Shoot();
         for(int i = 0; i < bulletPoint.Length; i++)
         {
-            BulletBase bullet = Instantiate(bulletFrefab, bulletPoint[i].position, bulletPoint[i].rotation);
-            bullet.OnInit(5.2f);
+            BulletBase b = SimplePool.Spawn<BulletBase>(PoolType.Bullet_2, bulletPoint[i].position, bulletPoint[i].rotation);
+            b.OnInit(5.2f);
         }
        
     }

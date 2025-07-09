@@ -9,7 +9,8 @@ public class Gun_1 : GunBase
     public override void Shoot()
     {
         base.Shoot();
-        BulletBase bullet = Instantiate(bulletFrefab,bulletPoint.position,bulletPoint.rotation);
-        bullet.OnInit(5.2f);
+        //BulletBase b = Instantiate(bulletFrefab,bulletPoint.position,bulletPoint.rotation);
+         BulletBase b= SimplePool.Spawn<BulletBase>(PoolType.Bullet_1,bulletPoint.position,bulletPoint.rotation);
+        b.OnInit(5.2f);
     }
 }

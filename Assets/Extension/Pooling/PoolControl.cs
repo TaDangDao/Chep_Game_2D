@@ -7,10 +7,17 @@ public class PoolControl : MonoBehaviour
     [SerializeField] PoolAmount[] poolAmounts;
     private void Awake()
     {
+        //Load tu folder Resources 
+        GameUnit[] units = Resources.LoadAll<GameUnit>("Pool/");
         for(int i = 0; i < poolAmounts.Length; i++)
         {
             SimplePool.Preload(poolAmounts[i].prefab, poolAmounts[i].amount, poolAmounts[i].parent);
         }
+        for(int i=0;i< units.Length; i++)
+        {
+            SimplePool.Preload(units[i], 0, new GameObject(units[i].name).transform);
+        }
+    
     }
 }
 public enum PoolType

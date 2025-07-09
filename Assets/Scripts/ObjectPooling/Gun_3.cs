@@ -15,8 +15,9 @@ public class Gun_3 : GunBase
     {
         for(int i = 0; i < 3; i++)
         {
-            BulletBase bullet = Instantiate(bulletFrefab, bulletPoint.position, bulletPoint.rotation);
-            bullet.OnInit(5.2f);
+             //BulletBase b = Instantiate(bulletFrefab, bulletPoint.position, bulletPoint.rotation);
+            BulletBase b = SimplePool.Spawn<BulletBase>(PoolType.Bullet_3, bulletPoint.position, bulletPoint.rotation);
+            b.OnInit(5.2f);
             yield return new WaitForSeconds(0.5f);
         }
     }

@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEditor.Build.Content;
 using UnityEngine;
 using UnityEngine.UIElements;
+using static UnityEditor.PlayerSettings;
 
 public static class SimplePool 
 {
@@ -14,7 +15,7 @@ public static class SimplePool
         {
             return;
         }
-        if (poolInstance.ContainsKey(prefab.poolType) || poolInstance[prefab.poolType]==null){
+        if (!poolInstance.ContainsKey(prefab.poolType) || poolInstance[prefab.poolType]==null){
             Pool p = new Pool();
             p.PreLoad(prefab, amount, parent);
             poolInstance[prefab.poolType] = p;
@@ -86,7 +87,7 @@ public class Pool
 {
     Transform parent;
     GameUnit prefab;
-    //list chua cac unit dang o tron pool
+    //list chua cac unit dang o trong pool
     Queue<GameUnit> inactives= new Queue<GameUnit>();
     // list chua cac unit dang dc su dung
     List<GameUnit> actives= new List<GameUnit>();
@@ -95,8 +96,9 @@ public class Pool
     {
         this.prefab = prefab;
         this.parent = parent;
+        Debug.Log(amount);
         for(int i=0;i<amount;i++) {
-            Despawn(Spawn(Vector3.zero,Quaternion.identity));
+            Despawn(GameObject.Instantiate(prefab, parent));
         }
     }
     // lay phan tu tu ppol
@@ -105,12 +107,13 @@ public class Pool
         GameUnit unit;
         if (inactives.Count <= 0)
         {
-            unit= GameObject.Instantiate(prefab, parent);
+            unit= GameObject.Instantiate(prefab, pos,rot,parent);
             return unit;
         }
         else
         {
             unit = inactives.Dequeue();
+            unit.gameObject.SetActive(true);
         }
         unit.TF.SetPositionAndRotation(pos, rot);
         actives.Add(unit);
